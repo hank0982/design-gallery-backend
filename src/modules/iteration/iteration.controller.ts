@@ -6,40 +6,44 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { IterationService } from './iteration.service';
 import { CreateIterationDto } from './dto/create-iteration.dto';
 import { UpdateIterationDto } from './dto/update-iteration.dto';
+import { IterationQueryDto } from './dto/iteration-query.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('iteration')
+@ApiTags('Iterations')
+@Controller('api/iterations')
 export class IterationController {
   constructor(private readonly iterationService: IterationService) {}
 
   @Post()
-  create(@Body() createIterationDto: CreateIterationDto) {
-    return this.iterationService.create(createIterationDto);
+  async create(@Body() createIterationDto: CreateIterationDto) {
+    return await this.iterationService.create(createIterationDto);
   }
 
   @Get()
-  findAll() {
-    return this.iterationService.findAll();
+  async findAll(@Query() iterationQuery: IterationQueryDto) {
+    return await this.iterationService.findAll(iterationQuery);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.iterationService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.iterationService.findOne(id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateIterationDto: UpdateIterationDto,
   ) {
-    return this.iterationService.update(id, updateIterationDto);
+    return await this.iterationService.update(id, updateIterationDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.iterationService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.iterationService.remove(id);
   }
 }

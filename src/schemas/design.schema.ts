@@ -24,16 +24,13 @@ export class Design {
   @Prop(Boolean)
   imageUsage: boolean;
 
-  @Prop({ type: { type: 'String' }, coordinates: [Number] })
-  mainColor: {
-    type: string;
-    coordinates: number[];
-  };
+  @Prop(String)
+  mainColor: string;
 
-  @Prop({ type: 'Number', min: 0, max: 5 })
+  @Prop({ type: 'Number', min: 1, max: 5 })
   amountOfText: number;
 
-  @Prop({ type: 'Number', min: 0, max: 5 })
+  @Prop({ type: 'Number', min: 1, max: 5 })
   averageOfOverallQuality: number;
 
   @Prop(String)

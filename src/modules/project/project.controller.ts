@@ -7,14 +7,14 @@ import {
   Param,
   Delete,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectQueryDto } from './dto/project-query.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Projects')
 @Controller('api/projects')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}

@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ProjectService } from '../project/project.service';
 import { DesignService } from './design.service';
 import { CreateDesignDto } from './dto/create-design.dto';
 import { UpdateDesignDto } from './dto/update-design.dto';
 
+@ApiTags('Designs')
 @Controller('api/designs')
 export class DesignController {
   constructor(

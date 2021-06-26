@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Iteration, IterationDocument } from 'src/schemas/iteration.schema';
+import { PaginationResult } from 'src/utils/pagination-result.class';
 import { CreateIterationDto } from './dto/create-iteration.dto';
+import { IterationQueryDto } from './dto/iteration-query.dto';
 import { UpdateIterationDto } from './dto/update-iteration.dto';
 
 @Injectable()
 export class IterationService {
-  create(createIterationDto: CreateIterationDto) {
-    return 'This action adds a new iteration';
+  constructor(
+    @InjectModel(Iteration.name)
+    private iterationModel: Model<IterationDocument>,
+  ) {}
+
+  async create(createIterationDto: CreateIterationDto) {
+    return await this.iterationModel.create(createIterationDto);
   }
 
-  findAll() {
-    return `This action returns all iteration`;
+  async findAll(query: IterationQueryDto) {
+    const results = await this.iterationModel
+      .find()
+      .skip(query.skip)
+      .limit(query.limit)
+      .exec();
+    return new PaginationResult(results, query.skip, query.limit).toPayload();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} iteration`;
+  async findOne(id: string) {
+    return await this.iterationModel.findOne({ _id: id });
   }
 
-  update(id: string, updateIterationDto: UpdateIterationDto) {
-    return `This action updates a #${id} iteration`;
+  async update(id: string, updateIterationDto: UpdateIterationDto) {
+    return await this.iterationModel.findOneAndUpdate(
+      { _id: id },
+      updateIterationDto,
+    );
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} iteration`;
+  async remove(id: string) {
+    return await this.iterationModel.findOneAndRemove({ _id: id });
   }
 }

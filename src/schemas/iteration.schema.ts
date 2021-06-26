@@ -1,7 +1,7 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
-import { designAspects, EDesignAspect } from 'src/enums/topics.enum';
+import { designAspects, EDesignAspect } from 'src/enums/design-aspects.enum';
 
 export type IterationDocument = Iteration & Document;
 
@@ -22,7 +22,7 @@ export class Iteration {
   @Prop({ type: String, enum: designAspects })
   aspect: EDesignAspect;
 
-  @Prop({ type: 'Number', min: 0, max: 5 })
+  @Prop({ type: 'Number', min: 1, max: 5 })
   degreeOfRevision: number;
 }
 

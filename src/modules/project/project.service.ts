@@ -1,8 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
+import { isNotEmpty, validateSync } from 'class-validator';
 import { FilterQuery, Model, ObjectId } from 'mongoose';
+import { Design, DesignDocument } from 'src/schemas/design.schema';
+import {
+  FeedbackUnit,
+  FeedbackUnitDocument,
+} from 'src/schemas/feedback-unit.schema';
 import { Project, ProjectDocument } from 'src/schemas/project.schema';
+import { PaginationResult } from 'src/utils/pagination-result.class';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectQueryDto } from './dto/project-query.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -10,6 +17,9 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 @Injectable()
 export class ProjectService {
   constructor(
+    @InjectModel(FeedbackUnit.name)
+    private feedbackUnitModel: Model<FeedbackUnitDocument>,
+    @InjectModel(Design.name) private designModel: Model<DesignDocument>,
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
   ) {}
 
@@ -18,31 +28,37 @@ export class ProjectService {
   }
 
   async findAll(projectQuery: ProjectQueryDto) {
-    let query = {};
-    const queryAndList = [
-      projectQuery.sources?.length > 0
-        ? { sources: { $in: projectQuery.sources } }
-        : undefined,
-      projectQuery.categories?.length > 0
-        ? { categories: { $in: projectQuery.categories } }
-        : undefined,
-    ].filter((x) => x);
-    query = {
-      $and: queryAndList.length > 0 ? queryAndList : undefined,
-    };
-    if (queryAndList.length > 0) {
-      return await this.projectModel
-        .find(query)
-        .skip(projectQuery.skip)
-        .limit(projectQuery.limit)
-        .exec();
-    } else {
-      return await this.projectModel
-        .find()
-        .skip(projectQuery.skip)
-        .limit(projectQuery.limit)
-        .exec();
+    let projectDocument = this.projectModel.find();
+    const projectIdsMatchedDesignProperties =
+      await this.queryProjectIdsMatchedDesignProperties(projectQuery);
+    const projectIdsMatchSubaspects =
+      await this.queryProjectIdsMatchedSubaspects(projectQuery);
+    if (projectIdsMatchedDesignProperties.length > 0) {
+      projectDocument = projectDocument.find({
+        _id: {
+          $or: [
+            { $in: projectIdsMatchedDesignProperties },
+            { $in: projectIdsMatchSubaspects },
+          ],
+        },
+      });
     }
+    const coursesAndSourcesQueries =
+      this.generateQueryForCategoriesAndSourcesByProjectQuery(projectQuery);
+    if (coursesAndSourcesQueries.length > 0) {
+      projectDocument = projectDocument.find({
+        $and: coursesAndSourcesQueries,
+      });
+    }
+
+    return new PaginationResult<ProjectDocument>(
+      await projectDocument
+        .skip(projectQuery.skip)
+        .limit(projectQuery.limit)
+        .exec(),
+      projectQuery.skip,
+      projectQuery.limit,
+    ).toPayload();
   }
 
   async findOne(id: string) {
@@ -71,6 +87,80 @@ export class ProjectService {
 
   async removeAll() {
     return await this.projectModel.remove().exec();
+  }
+
+  private generateQueryForCategoriesAndSourcesByProjectQuery(
+    projectQueryDto: ProjectQueryDto,
+  ) {
+    const queryAndList = [
+      projectQueryDto.sources?.length > 0
+        ? { sources: { $in: projectQueryDto.sources } }
+        : undefined,
+      projectQueryDto.categories?.length > 0
+        ? { categories: { $in: projectQueryDto.categories } }
+        : undefined,
+    ].filter((x) => x);
+    return queryAndList;
+  }
+
+  private async queryProjectIdsMatchedDesignProperties(
+    projectQuery: ProjectQueryDto,
+  ) {
+    if (
+      isNotEmpty(projectQuery.imageUsage) ||
+      isNotEmpty(projectQuery.amountOfText) ||
+      isNotEmpty(projectQuery.averageOfOverallQuality)
+    ) {
+      const queriesForDesign = [
+        isNotEmpty(projectQuery.amountOfText)
+          ? { amountOfText: projectQuery.amountOfText }
+          : undefined,
+        isNotEmpty(projectQuery.imageUsage)
+          ? { imageUsage: projectQuery.imageUsage }
+          : undefined,
+        isNotEmpty(projectQuery.averageOfOverallQuality)
+          ? { averageOfOverallQuality: projectQuery.averageOfOverallQuality }
+          : undefined,
+      ].filter((x) => x);
+      if (queriesForDesign.length > 0) {
+        const projectIds = (
+          await this.designModel
+            .find()
+            .and(queriesForDesign.length > 0 ? queriesForDesign : undefined)
+            .select('-_id projectId')
+            .exec()
+        ).map((x) => x.projectId);
+        return projectIds;
+      }
+    }
+    return [];
+  }
+
+  private async queryProjectIdsMatchedSubaspects(
+    projectQuery: ProjectQueryDto,
+  ) {
+    if (isNotEmpty(projectQuery.subaspects)) {
+      const queriesForFeedbackUnit = [
+        isNotEmpty(projectQuery.subaspects)
+          ? { amountOfText: { $in: projectQuery.subaspects } }
+          : undefined,
+      ].filter((x) => x);
+      if (queriesForFeedbackUnit.length > 0) {
+        const projectIds = (
+          await this.feedbackUnitModel
+            .find()
+            .and(
+              queriesForFeedbackUnit.length > 0
+                ? queriesForFeedbackUnit
+                : undefined,
+            )
+            .select('-_id projectId')
+            .exec()
+        ).map((x) => x.projectId);
+        return projectIds;
+      }
+    }
+    return [];
   }
 }
 

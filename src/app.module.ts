@@ -9,6 +9,7 @@ import { FeedbackModule } from './modules/feedback/feedback.module';
 import { IterationModule } from './modules/iteration/iteration.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { FeedbackUnitModule } from './modules/feedback-unit/feedback-unit.module';
 
 @Module({
   imports: [
@@ -17,18 +18,16 @@ import { join } from 'path';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(
-      'mongodb+srv://admin:d2qzDo6cWIIrYyZK@design-gallery.hphf6.mongodb.net/test?retryWrites=true&w=majority',
-      { useNewUrlParser: true },
-    ),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get('MONGODB_URL'),
+        useNewUrlParser: true,
       }),
       inject: [ConfigService],
     }),
     FeedbackModule,
+    FeedbackUnitModule,
     IterationModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
