@@ -14,4 +14,4 @@
   ```zsh
     npm run start:dev
   ```
-  Now go to https://localhost:3000/api and you will see the API documentation. Or go to https://localhost:3000 to see the pre-built frontend.
+  Now go to [https://localhost:3000/api](https://localhost:3000/api) and you will see the API documentation. Or go to [https://localhost:3000/](https://localhost:3000/) to see the pre-built frontend.
