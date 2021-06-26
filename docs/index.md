@@ -1,37 +1,17 @@
-## Welcome to GitHub Pages
+## Welcome to Design Gallery Backend
 
-You can use the [editor on GitHub](https://github.com/hank0982/design-gallery-backend/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/hank0982/design-gallery-backend/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### Step 1 Clone the repo
+  Check if you have NodeJS installed in your environment by type ```node --version``` in your terminal: current project is built in NodeJS >= v16.2.0. If not, please download NodeJS from https://nodejs.org/en/download/.
+  
+  After intstallation of NodeJS, run the following scripts to clone the repo and install the essential libraries.
+  ```zsh
+    git clone https://github.com/hank0982/design-gallery-backend.git
+    cd design-gallery-backend
+    npm i
+  ```
+### Step 2 Start a local web server
+  Inside the project folder, run the following scripts to run a development server.
+  ```zsh
+    npm run start:dev
+  ```
+  Now go to https://localhost:3000/api and you will see the API documentation. Or go to https://localhost:3000 to see the pre-built frontend.
