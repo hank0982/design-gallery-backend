@@ -64,7 +64,7 @@ npm i
   Head to [https://localhost:4200](https://localhost:4200) and you will see the design gallery.
   
 
- ### Techincal introduction to our project
+### Techincal introduction to our project
  AngularJS as frontend (FE) will fetch the data from NestJS as backend (BE) via APIs. Upon receiving requests from AngularJS, NestJS will submit a query to MongoDB to fetch the data and return it to AngularJS (FE).
 
 #### NestJS project structure
