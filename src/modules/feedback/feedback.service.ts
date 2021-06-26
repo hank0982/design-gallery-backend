@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
 import { Model } from 'mongoose';
 import { Feedback, FeedbackDocument } from 'src/schemas/feedback.schema';
-import { CreateFeedbackDto } from './dto/create-feedback.dto';
-import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { CreateFeedbackDto } from './dtos/create-feedback.dto';
+import { UpdateFeedbackDto } from './dtos/update-feedback.dto';
 
 @Injectable()
 export class FeedbackService {

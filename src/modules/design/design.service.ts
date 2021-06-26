@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
 import { Model } from 'mongoose';
 import { Design, DesignDocument } from 'src/schemas/design.schema';
-import { CreateDesignDto } from './dto/create-design.dto';
-import { UpdateDesignDto } from './dto/update-design.dto';
+import { CreateDesignDto } from './dtos/create-design.dto';
+import { UpdateDesignDto } from './dtos/update-design.dto';
 
 @Injectable()
 export class DesignService {

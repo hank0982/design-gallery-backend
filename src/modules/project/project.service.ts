@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
-import { isNotEmpty, validateSync } from 'class-validator';
+import { isNotEmpty } from 'class-validator';
 import { FilterQuery, Model, ObjectId } from 'mongoose';
 import { Design, DesignDocument } from 'src/schemas/design.schema';
 import {
@@ -9,10 +9,10 @@ import {
   FeedbackUnitDocument,
 } from 'src/schemas/feedback-unit.schema';
 import { Project, ProjectDocument } from 'src/schemas/project.schema';
-import { PaginationResult } from 'src/utils/pagination-result.class';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { ProjectQueryDto } from './dto/project-query.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import { PaginationResult } from 'src/utils/pagination-result.util';
+import { CreateProjectDto } from './dtos/create-project.dto';
+import { ProjectQueryDto } from './dtos/project-query.dto';
+import { UpdateProjectDto } from './dtos/update-project.dto';
 
 @Injectable()
 export class ProjectService {

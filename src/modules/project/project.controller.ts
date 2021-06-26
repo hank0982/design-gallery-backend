@@ -9,9 +9,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
-import { ProjectQueryDto } from './dto/project-query.dto';
+import { CreateProjectDto } from './dtos/create-project.dto';
+import { UpdateProjectDto } from './dtos/update-project.dto';
+import { ProjectQueryDto } from './dtos/project-query.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Projects')

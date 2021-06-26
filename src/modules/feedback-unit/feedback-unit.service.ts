@@ -5,8 +5,8 @@ import {
   FeedbackUnit,
   FeedbackUnitDocument,
 } from 'src/schemas/feedback-unit.schema';
-import { CreateFeedbackUnitDto } from './dto/create-feedback-unit.dto';
-import { UpdateFeedbackUnitDto } from './dto/update-feedback-unit.dto';
+import { CreateFeedbackUnitDto } from './dtos/create-feedback-unit.dto';
+import { UpdateFeedbackUnitDto } from './dtos/update-feedback-unit.dto';
 
 @Injectable()
 export class FeedbackUnitService {

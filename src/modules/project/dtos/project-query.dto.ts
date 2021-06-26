@@ -9,7 +9,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import { PaginationQueryDto } from 'src/common-dto/pagination-query.dto';
+import { PaginationQueryDto } from 'src/common-dtos/pagination-query.dto';
 
 export class ProjectQueryDto extends PaginationQueryDto {
   @ApiPropertyOptional()

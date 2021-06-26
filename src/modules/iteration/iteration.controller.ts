@@ -9,9 +9,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { IterationService } from './iteration.service';
-import { CreateIterationDto } from './dto/create-iteration.dto';
-import { UpdateIterationDto } from './dto/update-iteration.dto';
-import { IterationQueryDto } from './dto/iteration-query.dto';
+import { CreateIterationDto } from './dtos/create-iteration.dto';
+import { UpdateIterationDto } from './dtos/update-iteration.dto';
+import { IterationQueryDto } from './dtos/iteration-query.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Iterations')

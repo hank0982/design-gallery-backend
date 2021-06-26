@@ -10,8 +10,8 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { ProjectService } from '../project/project.service';
 import { DesignService } from './design.service';
-import { CreateDesignDto } from './dto/create-design.dto';
-import { UpdateDesignDto } from './dto/update-design.dto';
+import { CreateDesignDto } from './dtos/create-design.dto';
+import { UpdateDesignDto } from './dtos/update-design.dto';
 
 @ApiTags('Designs')
 @Controller('api/designs')

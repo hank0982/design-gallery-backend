@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Iteration, IterationDocument } from 'src/schemas/iteration.schema';
-import { PaginationResult } from 'src/utils/pagination-result.class';
-import { CreateIterationDto } from './dto/create-iteration.dto';
-import { IterationQueryDto } from './dto/iteration-query.dto';
-import { UpdateIterationDto } from './dto/update-iteration.dto';
+import { PaginationResult } from 'src/utils/pagination-result.util';
+import { CreateIterationDto } from './dtos/create-iteration.dto';
+import { IterationQueryDto } from './dtos/iteration-query.dto';
+import { UpdateIterationDto } from './dtos/update-iteration.dto';
 
 @Injectable()
 export class IterationService {

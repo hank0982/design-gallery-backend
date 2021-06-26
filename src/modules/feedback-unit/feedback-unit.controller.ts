@@ -8,8 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { FeedbackUnitService } from './feedback-unit.service';
-import { CreateFeedbackUnitDto } from './dto/create-feedback-unit.dto';
-import { UpdateFeedbackUnitDto } from './dto/update-feedback-unit.dto';
+import { CreateFeedbackUnitDto } from './dtos/create-feedback-unit.dto';
+import { UpdateFeedbackUnitDto } from './dtos/update-feedback-unit.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('FeedbackUnits')
