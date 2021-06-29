@@ -12,8 +12,13 @@ export class Design {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Project' })
   projectId: mongoose.ObjectId;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Feedback' }] })
-  feedbackIds: mongoose.ObjectId[];
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating' }] })
+  ratingIds: mongoose.ObjectId[];
+
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FeedbackUnit' }],
+  })
+  feedbackUnitIds: mongoose.ObjectId[];
 
   @Prop(Number)
   version: number;

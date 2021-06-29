@@ -5,11 +5,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProjectModule } from './modules/project/project.module';
 import { DesignModule } from './modules/design/design.module';
-import { FeedbackModule } from './modules/feedback/feedback.module';
 import { IterationModule } from './modules/iteration/iteration.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { FeedbackUnitModule } from './modules/feedback-unit/feedback-unit.module';
+import { RatingModule } from './modules/rating/rating.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -26,13 +27,14 @@ import { FeedbackUnitModule } from './modules/feedback-unit/feedback-unit.module
       }),
       inject: [ConfigService],
     }),
-    FeedbackModule,
+    RatingModule,
     FeedbackUnitModule,
     IterationModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
       exclude: ['/api*'],
     }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

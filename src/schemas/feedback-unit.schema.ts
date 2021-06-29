@@ -14,11 +14,8 @@ export class FeedbackUnit {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Design' })
   designId: mongoose.ObjectId;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Project' })
-  projectId: mongoose.ObjectId;
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Feedback' })
-  feedbackId: mongoose.ObjectId;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  feedbackProviderId: mongoose.ObjectId;
 
   @Prop({ type: String })
   content: string;

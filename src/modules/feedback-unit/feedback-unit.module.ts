@@ -15,5 +15,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   ],
   controllers: [FeedbackUnitController],
   providers: [FeedbackUnitService],
+  exports: [FeedbackUnitService, MongooseModule],
 })
 export class FeedbackUnitModule {}

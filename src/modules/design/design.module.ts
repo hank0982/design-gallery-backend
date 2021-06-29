@@ -3,22 +3,18 @@ import { DesignService } from './design.service';
 import { DesignController } from './design.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Design, DesignSchema } from 'src/schemas/design.schema';
-import { Project, ProjectSchema } from 'src/schemas/project.schema';
 import { ProjectService } from '../project/project.service';
-import {
-  FeedbackUnit,
-  FeedbackUnitSchema,
-} from 'src/schemas/feedback-unit.schema';
+import { ProjectModule } from '../project/project.module';
+import { FeedbackUnitModule } from '../feedback-unit/feedback-unit.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: FeedbackUnit.name, schema: FeedbackUnitSchema },
-      { name: Project.name, schema: ProjectSchema },
-      { name: Design.name, schema: DesignSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Design.name, schema: DesignSchema }]),
+    ProjectModule,
+    FeedbackUnitModule,
   ],
   controllers: [DesignController],
   providers: [DesignService, ProjectService],
+  exports: [MongooseModule],
 })
 export class DesignModule {}

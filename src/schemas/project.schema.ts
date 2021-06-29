@@ -15,11 +15,8 @@ export class Project {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Design' }] })
   designIds: mongoose.ObjectId[];
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Creator' })
-  creator: mongoose.ObjectId;
-
-  @Prop(String)
-  creatorOffDesignGallery: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  creatorId: mongoose.ObjectId;
 
   @Prop([String])
   categories: string[];

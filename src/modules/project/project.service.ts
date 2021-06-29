@@ -35,12 +35,10 @@ export class ProjectService {
       await this.queryProjectIdsMatchedSubaspects(projectQuery);
     if (projectIdsMatchedDesignProperties.length > 0) {
       projectDocument = projectDocument.find({
-        _id: {
-          $or: [
-            { $in: projectIdsMatchedDesignProperties },
-            { $in: projectIdsMatchSubaspects },
-          ],
-        },
+        $or: [
+          { _id: { $in: projectIdsMatchedDesignProperties } },
+          { _id: { $in: projectIdsMatchSubaspects } },
+        ],
       });
     }
     const coursesAndSourcesQueries =
@@ -113,7 +111,7 @@ export class ProjectService {
     ) {
       const queriesForDesign = [
         isNotEmpty(projectQuery.amountOfText)
-          ? { amountOfText: projectQuery.amountOfText }
+          ? { amountOfText: { $in: projectQuery.amountOfText } }
           : undefined,
         isNotEmpty(projectQuery.imageUsage)
           ? { imageUsage: projectQuery.imageUsage }
@@ -146,7 +144,7 @@ export class ProjectService {
           : undefined,
       ].filter((x) => x);
       if (queriesForFeedbackUnit.length > 0) {
-        const projectIds = (
+        const designIds = (
           await this.feedbackUnitModel
             .find()
             .and(
@@ -154,9 +152,15 @@ export class ProjectService {
                 ? queriesForFeedbackUnit
                 : undefined,
             )
-            .select('-_id projectId')
+            .select('-_id designId')
             .exec()
-        ).map((x) => x.projectId);
+        ).map((x) => x.designId);
+        const projectIds = await this.designModel
+          .find({
+            _id: { $in: designIds },
+          })
+          .select('-_id projectId')
+          .exec();
         return projectIds;
       }
     }

@@ -18,30 +18,30 @@ export class FeedbackUnitController {
   constructor(private readonly feedbackUnitService: FeedbackUnitService) {}
 
   @Post()
-  create(@Body() createFeedbackUnitDto: CreateFeedbackUnitDto) {
-    return this.feedbackUnitService.create(createFeedbackUnitDto);
+  async create(@Body() createFeedbackUnitDto: CreateFeedbackUnitDto) {
+    return await this.feedbackUnitService.create(createFeedbackUnitDto);
   }
 
   @Get()
-  findAll() {
-    return this.feedbackUnitService.findAll();
+  async findAll() {
+    return await this.feedbackUnitService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.feedbackUnitService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.feedbackUnitService.findOne(id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateFeedbackUnitDto: UpdateFeedbackUnitDto,
   ) {
-    return this.feedbackUnitService.update(+id, updateFeedbackUnitDto);
+    return await this.feedbackUnitService.update(id, updateFeedbackUnitDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.feedbackUnitService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.feedbackUnitService.remove(+id);
   }
 }

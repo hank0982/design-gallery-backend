@@ -23,15 +23,17 @@ export class FeedbackUnitService {
     return await this.feedbackUnitModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} feedbackUnit`;
+  async findOne(id: string) {
+    return await this.feedbackUnitModel.findById(id).exec();
   }
 
-  update(id: number, updateFeedbackUnitDto: UpdateFeedbackUnitDto) {
-    return `This action updates a #${id} feedbackUnit`;
+  async update(id: string, updateFeedbackUnitDto: UpdateFeedbackUnitDto) {
+    return await this.feedbackUnitModel
+      .findByIdAndUpdate(id, updateFeedbackUnitDto)
+      .exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} feedbackUnit`;
+  async remove(id: number) {
+    return await this.feedbackUnitModel.findByIdAndDelete(id).exec();
   }
 }

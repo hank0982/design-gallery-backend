@@ -1,9 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import {
-  IsArray,
   IsBoolean,
-  IsNotEmptyObject,
+  IsMongoId,
   IsNumber,
   IsOptional,
   IsString,
@@ -19,7 +18,7 @@ export class CreateDesignDto {
   name: string;
 
   @ApiProperty(String)
-  @IsString()
+  @IsMongoId()
   projectId: ObjectId;
 
   @ApiProperty()
@@ -41,7 +40,7 @@ export class CreateDesignDto {
   @ApiProperty()
   @IsNumber()
   @Max(5)
-  @Min(0)
+  @Min(1)
   amountOfText: number;
 
   @ApiPropertyOptional()

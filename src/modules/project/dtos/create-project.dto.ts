@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsMongoId, IsOptional, IsString } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
 export class CreateProjectDto {
@@ -13,13 +13,8 @@ export class CreateProjectDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
-  creator: ObjectId;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  creatorOffDesignGallery: string;
+  @IsMongoId()
+  creatorId: ObjectId;
 
   @ApiProperty()
   @IsString({ each: true })

@@ -35,12 +35,14 @@ export class ProjectQueryDto extends PaginationQueryDto {
   imageUsage: boolean;
 
   @ApiPropertyOptional()
-  @IsNumber()
-  @Max(5)
-  @Min(1)
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @Max(5, { each: true })
+  @Min(1, { each: true })
   @IsOptional()
-  @Type(() => Number)
-  amountOfText: number;
+  @Type(() => String)
+  @Transform(({ value }) => value.split(',').map((x) => Number(x)))
+  amountOfText: number[];
 
   @ApiPropertyOptional({ minimum: 1, maximum: 5 })
   @IsNumber()
