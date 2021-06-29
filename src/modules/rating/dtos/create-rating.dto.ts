@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEnum,
-  IsMongoId,
-  IsNumber,
-  IsString,
-  Max,
-  Min,
-} from 'class-validator';
+import { IsEnum, IsMongoId, IsNumber, Max, Min } from 'class-validator';
 import { ObjectId } from 'mongoose';
 import { designAspects, EDesignAspect } from 'src/enums/design-aspects.enum';
 
