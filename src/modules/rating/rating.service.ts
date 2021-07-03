@@ -7,7 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
 import { isNotEmpty } from 'class-validator';
 import { Model, ObjectId } from 'mongoose';
-import { EDesignAspect } from 'src/enums/design-aspects.enum';
+import { ErrorMessage } from 'src/error-messages/error-message.en';
 import { Design, DesignDocument } from 'src/schemas/design.schema';
 import { Rating, RatingDocument } from 'src/schemas/rating.schema';
 import { User, UserDocument } from 'src/schemas/user.schema';
@@ -26,11 +26,11 @@ export class RatingService {
 
   async create(createRatingDto: CreateRatingDto) {
     if (!(await this.userModel.findById(createRatingDto.raterId).exec())) {
-      throw new NotFoundException('Rater not found');
+      throw new NotFoundException(ErrorMessage.RaterNotFound);
     } else if (
       !(await this.designModel.findById(createRatingDto.designId).exec())
     ) {
-      throw new NotFoundException('Design not found');
+      throw new NotFoundException(ErrorMessage.DesignNotFound);
     } else if (
       await this.isRatingDuplicated(
         createRatingDto.raterId,

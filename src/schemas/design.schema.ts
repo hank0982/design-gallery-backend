@@ -26,8 +26,8 @@ export class Design {
   @Prop(String)
   imageUrl: string;
 
-  @Prop(Boolean)
-  imageUsage: boolean;
+  @Prop({ type: 'Number', min: 1, max: 5 })
+  imageUsage: number;
 
   @Prop(String)
   mainColor: string;
