@@ -114,7 +114,7 @@ export class ProjectService {
           ? { amountOfText: { $in: projectQuery.amountOfText } }
           : undefined,
         isNotEmpty(projectQuery.imageUsage)
-          ? { imageUsage: projectQuery.imageUsage }
+          ? { imageUsage: { $in: projectQuery.imageUsage } }
           : undefined,
         isNotEmpty(projectQuery.averageOfOverallQuality)
           ? { averageOfOverallQuality: projectQuery.averageOfOverallQuality }
@@ -124,7 +124,7 @@ export class ProjectService {
         const projectIds = (
           await this.designModel
             .find()
-            .and(queriesForDesign.length > 0 ? queriesForDesign : undefined)
+            .and(queriesForDesign)
             .select('-_id projectId')
             .exec()
         ).map((x) => x.projectId);

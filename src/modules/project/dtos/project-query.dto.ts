@@ -29,10 +29,14 @@ export class ProjectQueryDto extends PaginationQueryDto {
   categories: string[];
 
   @ApiPropertyOptional()
-  @IsBoolean()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @Max(5, { each: true })
+  @Min(1, { each: true })
   @IsOptional()
-  @Type(() => Boolean)
-  imageUsage: boolean;
+  @Type(() => String)
+  @Transform(({ value }) => value.split(',').map((x) => Number(x)))
+  imageUsage: number[];
 
   @ApiPropertyOptional()
   @IsArray()

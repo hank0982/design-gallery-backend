@@ -30,8 +30,9 @@ export class DesignService {
   }
 
   async update(id: string, updateDesignDto: UpdateDesignDto) {
+    const updateDesignInstance = classToPlain(updateDesignDto);
     return await this.designModel
-      .findOneAndUpdate({ _id: id }, updateDesignDto)
+      .findOneAndUpdate({ _id: id }, updateDesignInstance)
       .exec();
   }
 
