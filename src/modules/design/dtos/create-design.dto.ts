@@ -25,10 +25,12 @@ export class CreateDesignDto {
   projectId: ObjectId;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @IsUrl()
   imageUrl: string;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @IsMongoId()
   imageId: ObjectId;
 
