@@ -2,6 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import {
   IsBoolean,
+  IsEnum,
   IsMongoId,
   IsNumber,
   IsOptional,
@@ -11,6 +12,8 @@ import {
   Min,
 } from 'class-validator';
 import { ObjectId } from 'mongoose';
+import { OVERALL_QUALITY_MAX, OVERALL_QUALITY_MIN, TEXT_PROPORTION_MAX, TEXT_PROPORTION_MIN, TEXT_QUANTITY_MAX, TEXT_QUANTITY_MIN } from 'src/constants/properties-limitation.constant';
+import { designImageUsages, EDesignImageUsages } from 'src/enums/design-image-usage.enum';
 
 export class CreateDesignDto {
   @ApiProperty()
@@ -21,17 +24,21 @@ export class CreateDesignDto {
   @IsMongoId()
   projectId: ObjectId;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsUrl()
   imageUrl: string;
+
+  @ApiPropertyOptional()
+  @IsMongoId()
+  imageId: ObjectId;
 
   @ApiProperty(Number)
   @IsNumber()
   version: number;
 
-  @ApiProperty(Boolean)
-  @IsBoolean()
-  imageUsage: boolean;
+  @ApiProperty({ enum: designImageUsages, enumName: 'EDesignImageUsages' })
+  @IsEnum(EDesignImageUsages)
+  imageUsage: EDesignImageUsages;
 
   @ApiProperty()
   @IsString()
@@ -39,9 +46,21 @@ export class CreateDesignDto {
 
   @ApiProperty()
   @IsNumber()
-  @Max(5)
-  @Min(1)
-  amountOfText: number;
+  @Max(OVERALL_QUALITY_MAX)
+  @Min(OVERALL_QUALITY_MIN)
+  overallQuality: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @Max(TEXT_PROPORTION_MAX)
+  @Min(TEXT_PROPORTION_MIN)
+  textProportion: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @Max(TEXT_QUANTITY_MAX)
+  @Min(TEXT_QUANTITY_MIN)
+  textQuantity: number;
 
   @ApiPropertyOptional()
   @IsString()

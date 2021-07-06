@@ -3,6 +3,7 @@ import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
@@ -10,6 +11,8 @@ import {
   Min,
 } from 'class-validator';
 import { PaginationQueryDto } from 'src/common-dtos/pagination-query.dto';
+import { OVERALL_QUALITY_MAX, OVERALL_QUALITY_MIN, TEXT_PROPORTION_MAX, TEXT_PROPORTION_MIN } from 'src/constants/properties-limitation.constant';
+import { EDesignImageUsages } from 'src/enums/design-image-usage.enum';
 
 export class ProjectQueryDto extends PaginationQueryDto {
   @ApiPropertyOptional()
@@ -30,31 +33,29 @@ export class ProjectQueryDto extends PaginationQueryDto {
 
   @ApiPropertyOptional()
   @IsArray()
-  @IsNumber({}, { each: true })
-  @Max(5, { each: true })
-  @Min(1, { each: true })
+  @IsEnum(EDesignImageUsages, { each: true })
   @IsOptional()
   @Type(() => String)
-  @Transform(({ value }) => value.split(',').map((x) => Number(x)))
-  imageUsage: number[];
+  @Transform(({ value }) => value.split(',').map((x) => EDesignImageUsages[x]))
+  imageUsage: EDesignImageUsages[];
 
   @ApiPropertyOptional()
   @IsArray()
   @IsNumber({}, { each: true })
-  @Max(5, { each: true })
-  @Min(1, { each: true })
+  @Max(TEXT_PROPORTION_MAX, { each: true })
+  @Min(TEXT_PROPORTION_MIN, { each: true })
   @IsOptional()
   @Type(() => String)
   @Transform(({ value }) => value.split(',').map((x) => Number(x)))
   amountOfText: number[];
 
-  @ApiPropertyOptional({ minimum: 1, maximum: 5 })
+  @ApiPropertyOptional({ minimum: OVERALL_QUALITY_MIN, maximum: OVERALL_QUALITY_MAX })
   @IsNumber()
   @IsOptional()
-  @Max(5)
-  @Min(1)
+  @Max(OVERALL_QUALITY_MAX)
+  @Min(OVERALL_QUALITY_MIN)
   @Type(() => Number)
-  averageOfOverallQuality: number;
+  overallQuality: number;
 
   @ApiPropertyOptional()
   @IsArray()

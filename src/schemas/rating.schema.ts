@@ -46,6 +46,7 @@ export class AspectRating extends Document {
   @IsOptional()
   OTHER: number;
 }
+
 @Schema({ timestamps: true })
 export class Rating {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Design' })

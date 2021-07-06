@@ -96,6 +96,9 @@ export class RatingService {
     return await this.ratingModel.findByIdAndDelete(id).exec();
   }
 
+  async removeAll() {
+    return await this.ratingModel.remove().exec();
+  }
   private async isRatingDuplicated(raterId: ObjectId, designId: ObjectId) {
     return (
       (

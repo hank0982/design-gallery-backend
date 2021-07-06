@@ -25,6 +25,9 @@ export class FeedbackUnit {
 
   @Prop({ type: String, enum: designSubaspects })
   subaspect: EDesignSubaspect;
+  
+  @Prop({ type: Boolean })
+  isPositive: boolean;
 }
 
 export const FeedbackUnitSchema = SchemaFactory.createForClass(FeedbackUnit);

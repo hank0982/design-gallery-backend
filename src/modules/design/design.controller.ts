@@ -6,13 +6,13 @@ import {
   Patch,
   Param,
   Delete,
-  UploadedFiles,
   UseInterceptors,
   NotFoundException,
   Req,
   BadRequestException,
+  UploadedFile,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { isValidObjectId } from 'mongoose';
 import * as multer from 'multer';
@@ -80,7 +80,7 @@ export class DesignController {
 
   @Post('upload')
   @UseInterceptors(
-    FilesInterceptor('files', undefined, {
+    FileInterceptor('file', {
       storage: multer.diskStorage({
         destination: (_req, _file, cb) =>
           cb(null, path.resolve('.', 'client', 'uploads')),
@@ -97,27 +97,18 @@ export class DesignController {
         if (mimetype && extname) {
           return cb(null, true);
         }
-
         req.fileValidationError = ErrorMessage.FileTypeNotSupported;
         return cb(null, false);
       },
     }),
   )
-  uploadFile(@Req() req, @UploadedFiles() files: Express.Multer.File[]) {
+  async uploadFile(@Req() req, @UploadedFile() file: Express.Multer.File) {
     if (req.fileValidationError) {
       throw new BadRequestException(req.fileValidationError);
     }
-    if (!files || files.length == 0) {
+    if (!file) {
       throw new BadRequestException('Invalid files');
     }
-    const hostname = req.headers.host;
-    const response = { imageUrls: {} };
-    files.forEach(
-      (file) =>
-        (response.imageUrls[
-          file.originalname
-        ] = `${hostname}/uploads/${file.filename}`),
-    );
-    return response;
+    return await this.designService.saveImage(path.parse(file.filename).name, file.originalname, file.size);
   }
 }

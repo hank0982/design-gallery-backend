@@ -11,6 +11,8 @@ import { join } from 'path';
 import { FeedbackUnitModule } from './modules/feedback-unit/feedback-unit.module';
 import { RatingModule } from './modules/rating/rating.module';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { ImageModule } from './modules/image/image.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { UserModule } from './modules/user/user.module';
       exclude: ['/api*'],
     }),
     UserModule,
+    AuthModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

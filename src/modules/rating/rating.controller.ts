@@ -50,4 +50,9 @@ export class RatingController {
   async remove(@Param('id') id: string) {
     return await this.ratingService.remove(id);
   }
+
+  @Delete()
+  async removeAll() {
+    return await this.ratingService.removeAll();
+  }
 }

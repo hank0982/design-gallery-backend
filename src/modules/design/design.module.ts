@@ -6,10 +6,14 @@ import { Design, DesignSchema } from 'src/schemas/design.schema';
 import { ProjectService } from '../project/project.service';
 import { ProjectModule } from '../project/project.module';
 import { FeedbackUnitModule } from '../feedback-unit/feedback-unit.module';
+import { Image, ImageSchema } from 'src/schemas/image.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Design.name, schema: DesignSchema }]),
+    MongooseModule.forFeature([
+      { name: Design.name, schema: DesignSchema },
+      { name: Image.name, schema: ImageSchema }
+    ]),
     ProjectModule,
     FeedbackUnitModule,
   ],

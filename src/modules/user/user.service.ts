@@ -61,13 +61,18 @@ export class UserService {
       .exec();
   }
 
-  async findOne(id: string) {
+  async findOneById(id: string) {
     if (mongoose.isValidObjectId(id)) {
       return await this.userModel.findById(id).exec();
     } else {
       throw new NotFoundException('User not found');
     }
   }
+
+  async findOneByUsername(username: string) {
+    return await this.userModel.findOne({username}).exec();
+  }
+
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     return await this.userModel.findByIdAndUpdate(id, updateUserDto).exec();

@@ -107,7 +107,7 @@ export class ProjectService {
     if (
       isNotEmpty(projectQuery.imageUsage) ||
       isNotEmpty(projectQuery.amountOfText) ||
-      isNotEmpty(projectQuery.averageOfOverallQuality)
+      isNotEmpty(projectQuery.overallQuality)
     ) {
       const queriesForDesign = [
         isNotEmpty(projectQuery.amountOfText)
@@ -116,8 +116,8 @@ export class ProjectService {
         isNotEmpty(projectQuery.imageUsage)
           ? { imageUsage: { $in: projectQuery.imageUsage } }
           : undefined,
-        isNotEmpty(projectQuery.averageOfOverallQuality)
-          ? { averageOfOverallQuality: projectQuery.averageOfOverallQuality }
+        isNotEmpty(projectQuery.overallQuality)
+          ? { overallQuality: projectQuery.overallQuality }
           : undefined,
       ].filter((x) => x);
       if (queriesForDesign.length > 0) {
