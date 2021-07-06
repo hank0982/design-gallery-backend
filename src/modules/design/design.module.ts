@@ -7,6 +7,7 @@ import { ProjectService } from '../project/project.service';
 import { ProjectModule } from '../project/project.module';
 import { FeedbackUnitModule } from '../feedback-unit/feedback-unit.module';
 import { Image, ImageSchema } from 'src/schemas/image.schema';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { Image, ImageSchema } from 'src/schemas/image.schema';
     ]),
     ProjectModule,
     FeedbackUnitModule,
+    UserModule,
   ],
   controllers: [DesignController],
   providers: [DesignService, ProjectService],
