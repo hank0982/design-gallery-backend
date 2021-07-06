@@ -73,7 +73,6 @@ export class UserService {
     return await this.userModel.findOne({username}).exec();
   }
 
-
   async update(id: string, updateUserDto: UpdateUserDto) {
     return await this.userModel.findByIdAndUpdate(id, updateUserDto).exec();
   }

@@ -8,6 +8,7 @@ import {
   FeedbackUnit,
   FeedbackUnitSchema,
 } from 'src/schemas/feedback-unit.schema';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import {
       { name: Project.name, schema: ProjectSchema },
       { name: FeedbackUnit.name, schema: FeedbackUnitSchema },
     ]),
+    UserModule,
   ],
   controllers: [ProjectController],
   providers: [ProjectService],

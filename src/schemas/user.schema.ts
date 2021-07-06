@@ -16,7 +16,7 @@ export class User {
   username: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }] })
-  projects: mongoose.ObjectId[];
+  projectIds: mongoose.ObjectId[];
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating' }] })
   ratingIds: mongoose.ObjectId[];

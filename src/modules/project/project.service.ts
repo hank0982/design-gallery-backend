@@ -9,7 +9,9 @@ import {
   FeedbackUnitDocument,
 } from 'src/schemas/feedback-unit.schema';
 import { Project, ProjectDocument } from 'src/schemas/project.schema';
+import { User, UserDocument } from 'src/schemas/user.schema';
 import { PaginationResult } from 'src/utils/pagination-result.util';
+import { UserService } from '../user/user.service';
 import { CreateProjectDto } from './dtos/create-project.dto';
 import { ProjectQueryDto } from './dtos/project-query.dto';
 import { UpdateProjectDto } from './dtos/update-project.dto';
@@ -19,12 +21,17 @@ export class ProjectService {
   constructor(
     @InjectModel(FeedbackUnit.name)
     private feedbackUnitModel: Model<FeedbackUnitDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Design.name) private designModel: Model<DesignDocument>,
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
   ) {}
 
   async create(createProjectDto: CreateProjectDto) {
-    return await this.projectModel.create(createProjectDto);
+    const newProject = await this.projectModel.create(createProjectDto);
+    await this.userModel.findByIdAndUpdate(createProjectDto.creatorId, 
+      {$push: {projectIds: newProject._id}}
+    );
+    return newProject;
   }
 
   async findAll(projectQuery: ProjectQueryDto) {
