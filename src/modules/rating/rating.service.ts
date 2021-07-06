@@ -71,10 +71,11 @@ export class RatingService {
     const queryForRating = [
       isNotEmpty(query.raterId) ? { raterId: query.raterId } : undefined,
       isNotEmpty(query.designId) ? { designId: query.designId } : undefined,
-    ].filter((x) => x);
-    const ratingModelQuery = this.ratingModel
-      .find()
-      .and(queryForRating.length > 0 ? queryForRating : undefined);
+    ].filter((x) => !!x);
+    let ratingModelQuery = this.ratingModel.find();
+    if (queryForRating.length > 0) {
+      ratingModelQuery = ratingModelQuery.and(queryForRating);
+    }
     const results = await ratingModelQuery
       .skip(query.skip)
       .limit(query.limit)
