@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
 import { Model } from 'mongoose';
-import path from 'path';
+import * as path from 'path';
 import { Design, DesignDocument } from 'src/schemas/design.schema';
 import { ImageDocument, Image } from 'src/schemas/image.schema';
 import { CreateDesignDto } from './dtos/create-design.dto';
