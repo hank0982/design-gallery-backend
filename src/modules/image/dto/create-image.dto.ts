@@ -8,6 +8,14 @@ export class CreateImageDto {
 
     @ApiProperty()
     @IsString()
+    newFileName: string;
+
+    @ApiProperty()
+    @IsString()
+    path: string;
+
+    @ApiProperty()
+    @IsString()
     uuid: string;
 
     @ApiProperty()
