@@ -109,6 +109,8 @@ export class DesignController {
     if (!file) {
       throw new BadRequestException('Invalid files');
     }
-    return await this.designService.saveImage(path.parse(file.filename).name, file.originalname, file.size);
+    const hostname = req.headers.host;
+
+    return await this.designService.saveImage(file.filename, file.originalname, file.size, hostname);
   }
 }

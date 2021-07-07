@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
 import { Model } from 'mongoose';
+import path from 'path';
 import { Design, DesignDocument } from 'src/schemas/design.schema';
 import { ImageDocument, Image } from 'src/schemas/image.schema';
 import { CreateDesignDto } from './dtos/create-design.dto';
@@ -46,11 +47,13 @@ export class DesignService {
     return await this.designModel.findOneAndDelete({ _id: id }).exec();
   }
 
-  async saveImage(fileName: string, originalFileName: string, size: number) {
+  async saveImage(fileName: string, originalFileName: string, size: number, hostname: string) {
     return await this.imageModel.create(
       {
         originalFileName,
-        uuid: fileName,
+        newFileName: fileName,
+        url: `${hostname}/uploads/${fileName}`,
+        uuid: path.parse(fileName).name,
         size,
       }
     )

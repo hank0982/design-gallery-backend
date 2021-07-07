@@ -9,6 +9,12 @@ export class Image {
   originalFileName: string;
 
   @Prop(String)
+  newFileName: string;
+
+  @Prop(String)
+  url: string;
+
+  @Prop(String)
   uuid: string;
 
   @Prop(Number)
