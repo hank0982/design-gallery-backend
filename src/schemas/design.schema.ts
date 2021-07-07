@@ -31,9 +31,6 @@ export class Design {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Image' })
   imageId: string;
 
-  @Prop({ type: String, enum: designImageUsages })
-  imageUsage: EDesignImageUsages;
-
   @Prop(String)
   mainColor: string;
 
@@ -48,6 +45,12 @@ export class Design {
 
   @Prop(String)
   rational: string;
+
+  @Prop({
+    type: 'String',
+    enum: designImageUsages,
+  })
+  imageUsage: EDesignImageUsages; 
 }
 
 export const DesignSchema = SchemaFactory.createForClass(Design);

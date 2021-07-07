@@ -38,8 +38,8 @@ export class CreateDesignDto {
   @IsNumber()
   version: number;
 
-  @ApiProperty({ enum: designImageUsages, enumName: 'EDesignImageUsages' })
   @IsEnum(EDesignImageUsages)
+  @ApiProperty({ enum: designImageUsages, enumName: 'EDesignImageUsages' })
   imageUsage: EDesignImageUsages;
 
   @ApiProperty()
