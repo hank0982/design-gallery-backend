@@ -34,6 +34,9 @@ export class Design {
   @Prop(String)
   mainColor: string;
 
+  @Prop(String)
+  dominantColor: string;
+
   @Prop({ type: 'Number', min: TEXT_PROPORTION_MIN, max: TEXT_PROPORTION_MAX })
   textProportion: number;
 

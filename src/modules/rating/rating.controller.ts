@@ -16,7 +16,9 @@ import { RatingQueryDto } from './dtos/rating-query.dto';
 @ApiTags('Rating')
 @Controller('api/ratings')
 export class RatingController {
-  constructor(private readonly ratingService: RatingService) {}
+  constructor(
+    private readonly ratingService: RatingService
+  ) {}
 
   @Post()
   async create(@Body() createRatingDto: CreateRatingDto) {

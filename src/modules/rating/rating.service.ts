@@ -6,7 +6,8 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
 import { isNotEmpty } from 'class-validator';
-import { Model, ObjectId } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
+
 import { ErrorMessage } from 'src/error-messages/error-message.en';
 import { Design, DesignDocument } from 'src/schemas/design.schema';
 import { Rating, RatingDocument } from 'src/schemas/rating.schema';
@@ -15,7 +16,6 @@ import { PaginationResult } from 'src/utils/pagination-result.util';
 import { CreateRatingDto } from './dtos/create-rating.dto';
 import { RatingQueryDto } from './dtos/rating-query.dto';
 import { UpdateRatingDto } from './dtos/update-rating.dto';
-
 @Injectable()
 export class RatingService {
   constructor(
@@ -59,6 +59,10 @@ export class RatingService {
           [createRatingDto.aspect]: createRatingDto.rating,
         },
       });
+      await this.designModel.updateOne(
+        {_id: createRatingDto.designId},
+        { $push: { ratingIds: newRating._id } },
+      )
       await this.userModel.updateOne(
         { _id: createRatingDto.raterId },
         { $push: { ratingIds: newRating._id } },
@@ -93,12 +97,29 @@ export class RatingService {
   }
 
   async remove(id: string) {
+    await this.userModel.updateMany(
+      { ratingIds: id as any},
+      { $pull: { ratingIds: id } }
+    )
+    await this.designModel.updateMany(
+      { ratingIds: id as any},
+      { $pull: { ratingIds: id } }
+    )
     return await this.ratingModel.findByIdAndDelete(id).exec();
   }
 
   async removeAll() {
+    await this.userModel.updateMany(
+      {},
+      { ratingIds: [] }
+    )
+    await this.designModel.updateMany(
+      {},
+      { ratingIds: [] }
+    )
     return await this.ratingModel.remove().exec();
   }
+
   private async isRatingDuplicated(raterId: ObjectId, designId: ObjectId) {
     return (
       (

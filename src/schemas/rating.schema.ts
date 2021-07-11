@@ -9,11 +9,6 @@ export class AspectRating extends Document {
   @Prop({ type: 'Number' })
   @IsNumber()
   @IsOptional()
-  OVERALL: number;
-
-  @Prop({ type: 'Number' })
-  @IsNumber()
-  @IsOptional()
   APPROPRIATENESS: number;
 
   @Prop({ type: 'Number' })
@@ -40,11 +35,6 @@ export class AspectRating extends Document {
   @IsNumber()
   @IsOptional()
   READABILITY: number;
-
-  @Prop({ type: 'Number' })
-  @IsNumber()
-  @IsOptional()
-  OTHER: number;
 }
 
 @Schema({ timestamps: true })

@@ -6,3 +6,6 @@ export const TEXT_QUANTITY_MAX = 3;
 
 export const OVERALL_QUALITY_MIN = 1;
 export const OVERALL_QUALITY_MAX = 5;
+
+export const RATING_MIN = 1;
+export const RATING_MAX = 5;

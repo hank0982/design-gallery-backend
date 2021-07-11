@@ -1,24 +1,35 @@
-import { IsEnum, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsEnum, IsString } from 'class-validator';
 import { ObjectId } from 'mongoose';
-import { EDesignAspect } from 'src/enums/design-aspects.enum';
+import { designAspects, EDesignAspect } from 'src/enums/design-aspects.enum';
 import { EDesignSubaspect } from 'src/enums/design-subaspects.enum copy';
 
 export class CreateFeedbackUnitDto {
+  @ApiProperty()
   @IsString()
   designId: ObjectId;
 
+  @ApiProperty()
   @IsString()
-  projectId: ObjectId;
+  feedbackProviderId: ObjectId;
 
-  @IsString()
-  feedbackId: ObjectId;
-
+  @ApiProperty()
   @IsString()
   content: string;
 
+  @ApiProperty({ enum: designAspects, enumName: 'EDesignAspect' })
   @IsEnum(EDesignAspect)
   aspect: EDesignAspect;
 
-  @IsEnum(EDesignSubaspect)
-  subaspect: EDesignSubaspect;
+  @ApiProperty()
+  @IsString()
+  subaspect: string;
+
+  @ApiProperty({type: Boolean})
+  @IsBoolean()
+  addressed: boolean;
+
+  @ApiProperty({type: Boolean})
+  @IsBoolean()
+  isPositive: boolean;
 }

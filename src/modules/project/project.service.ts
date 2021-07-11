@@ -2,25 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
 import { isNotEmpty } from 'class-validator';
-import { FilterQuery, Model, ObjectId } from 'mongoose';
+import { FilterQuery, Model, ObjectId, Types } from 'mongoose';
+import { EDesignAspect } from 'src/enums/design-aspects.enum';
 import { Design, DesignDocument } from 'src/schemas/design.schema';
 import {
   FeedbackUnit,
   FeedbackUnitDocument,
 } from 'src/schemas/feedback-unit.schema';
 import { Project, ProjectDocument } from 'src/schemas/project.schema';
+import { Rating, RatingDocument } from 'src/schemas/rating.schema';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { PaginationResult } from 'src/utils/pagination-result.util';
 import { UserService } from '../user/user.service';
 import { CreateProjectDto } from './dtos/create-project.dto';
 import { ProjectQueryDto } from './dtos/project-query.dto';
 import { UpdateProjectDto } from './dtos/update-project.dto';
-
 @Injectable()
 export class ProjectService {
   constructor(
-    @InjectModel(FeedbackUnit.name)
-    private feedbackUnitModel: Model<FeedbackUnitDocument>,
+    @InjectModel(Rating.name) private ratingModel: Model<RatingDocument>,
+    @InjectModel(FeedbackUnit.name) private feedbackUnitModel: Model<FeedbackUnitDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Design.name) private designModel: Model<DesignDocument>,
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
@@ -28,7 +29,8 @@ export class ProjectService {
 
   async create(createProjectDto: CreateProjectDto) {
     const newProject = await this.projectModel.create(createProjectDto);
-    await this.userModel.findByIdAndUpdate(createProjectDto.creatorId, 
+    await this.userModel.updateOne(
+      {_id: createProjectDto.creatorId}, 
       {$push: {projectIds: newProject._id}}
     );
     return newProject;
@@ -70,6 +72,34 @@ export class ProjectService {
     return await this.projectModel.findById(id).exec();
   }
 
+  async findProjectRatingsAndFeedback(id: string) {
+    const projectToDesign = await this.projectModel
+      .aggregate()
+      .match({_id: Types.ObjectId(id)})
+      .lookup({
+        from: 'designs',
+        localField: 'designIds',
+        foreignField: '_id',
+        as: 'designPayload'
+      })
+      .project('designPayload._id')
+      .unwind('designPayload')
+      .project({
+        designId: '$designPayload._id'
+      }).exec()
+    const availableDesignIds = projectToDesign.map(item => item.designId);
+    const ratingResult =  await this.ratingModel
+      .aggregate()
+      .match({designId: {$in: availableDesignIds}})
+    const feedbackUnitResult = await this.feedbackUnitModel
+      .aggregate()
+      .match({designId: {$in: availableDesignIds}})
+    return {
+      rating: ratingResult,
+      feedbackUnitResult,
+    };
+  }
+
   async addDesignToProject(projectId: ObjectId, designId: ObjectId) {
     const originalProject = await this.projectModel.findById(projectId).exec();
     const newDesignIds = [...originalProject.designIds, designId];
@@ -87,11 +117,43 @@ export class ProjectService {
   }
 
   async remove(id: string) {
+    await this.userModel.updateOne(
+      {projectIds: id as any},
+      { $pull: {projectIds: id} }
+    ).exec()
+    await this.designModel.deleteMany({projectId: id as any}).exec();
     return await this.projectModel.deleteOne({ _id: id }).exec();
   }
 
   async removeAll() {
     return await this.projectModel.remove().exec();
+  }
+
+  async findAllRatedProject(aspect: EDesignAspect) {
+    const feedbackUnitsWithAspect =
+    await this.feedbackUnitModel
+      .aggregate()
+      .match({
+        aspect
+      })
+      .project('designId')
+      .lookup({
+        from: 'designs',
+        localField: 'designId',
+        foreignField: '_id',
+        as: 'design',
+      }).group(
+        { _id: '$design.projectId',  count: { $sum: 1 }}
+      )
+      .unwind('_id')
+      .project({
+        _id: 1,
+        hasCompleted: {
+          $cond: { if: { $gte: ['$count', 2] }, then: true, else: false },
+        },
+      })
+   
+    return feedbackUnitsWithAspect;
   }
 
   private generateQueryForCategoriesAndSourcesByProjectQuery(
@@ -113,12 +175,16 @@ export class ProjectService {
   ) {
     if (
       isNotEmpty(projectQuery.imageUsage) ||
-      isNotEmpty(projectQuery.amountOfText) ||
-      isNotEmpty(projectQuery.overallQuality)
+      isNotEmpty(projectQuery.textProportion) ||
+      isNotEmpty(projectQuery.overallQuality) ||
+      isNotEmpty(projectQuery.textQuantity)
     ) {
       const queriesForDesign = [
-        isNotEmpty(projectQuery.amountOfText)
-          ? { amountOfText: { $in: projectQuery.amountOfText } }
+        isNotEmpty(projectQuery.textProportion)
+          ? { textProportion: { $in: projectQuery.textProportion } }
+          : undefined,
+        isNotEmpty(projectQuery.textQuantity)
+          ? { textQuantity: { $in: projectQuery.textQuantity } }
           : undefined,
         isNotEmpty(projectQuery.imageUsage)
           ? { imageUsage: { $in: projectQuery.imageUsage } }

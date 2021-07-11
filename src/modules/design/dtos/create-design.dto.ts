@@ -1,7 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import {
-  IsBoolean,
   IsEnum,
   IsMongoId,
   IsNumber,
@@ -45,6 +44,10 @@ export class CreateDesignDto {
   @ApiProperty()
   @IsString()
   mainColor: string;
+
+  @ApiProperty()
+  @IsString()
+  dominantColor: string;
 
   @ApiProperty()
   @IsNumber()

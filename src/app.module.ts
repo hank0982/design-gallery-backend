@@ -13,6 +13,7 @@ import { RatingModule } from './modules/rating/rating.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ImageModule } from './modules/image/image.module';
+import { FeedbackUnitService } from './modules/feedback-unit/feedback-unit.service';
 
 @Module({
   imports: [
@@ -41,6 +42,6 @@ import { ImageModule } from './modules/image/image.module';
     ImageModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, FeedbackUnitService],
 })
 export class AppModule {}

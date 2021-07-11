@@ -13,6 +13,7 @@ import { CreateProjectDto } from './dtos/create-project.dto';
 import { UpdateProjectDto } from './dtos/update-project.dto';
 import { ProjectQueryDto } from './dtos/project-query.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { EDesignAspect } from 'src/enums/design-aspects.enum';
 
 @ApiTags('Projects')
 @Controller('api/projects')
@@ -29,9 +30,22 @@ export class ProjectController {
     return await this.projectService.findAll(projectQuery);
   }
 
+
+  @Get('rated-project-aspect/:aspectName')
+  async findAllRatedProject(
+    @Param('aspectName') aspect: string,
+  ) {
+    return await this.projectService.findAllRatedProject(EDesignAspect[aspect])
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.projectService.findOne(id);
+  }
+
+  @Get(':id/feedback-ratings')
+  async fetchRatingsAndFeedback(@Param('id') id: string) {
+    return await this.projectService.findProjectRatingsAndFeedback(id);
   }
 
   @Patch(':id')
@@ -51,4 +65,5 @@ export class ProjectController {
   async removeAll() {
     return await this.projectService.removeAll();
   }
+
 }

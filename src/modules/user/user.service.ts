@@ -24,7 +24,7 @@ export class UserService {
     return await this.userModel.find().exec();
   }
 
-  async findRatedProjects(id: string) {
+  async findRatedProjects(id: string ) {
     const aspects = [...Object.values(EDesignAspect)];
     const ratingMatches = {};
     aspects.forEach(

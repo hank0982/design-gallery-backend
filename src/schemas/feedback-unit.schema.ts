@@ -17,17 +17,20 @@ export class FeedbackUnit {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   feedbackProviderId: mongoose.ObjectId;
 
-  @Prop({ type: String })
+  @Prop(String)
   content: string;
 
-  @Prop({ type: String, enum: designAspects })
+  @Prop({ type: 'String', enum: designAspects })
   aspect: EDesignAspect;
 
-  @Prop({ type: String, enum: designSubaspects })
-  subaspect: EDesignSubaspect;
+  @Prop(String)
+  subaspect: string;
   
   @Prop({ type: Boolean })
   isPositive: boolean;
+
+  @Prop({ type: Boolean})
+  addressed: boolean;
 }
 
 export const FeedbackUnitSchema = SchemaFactory.createForClass(FeedbackUnit);

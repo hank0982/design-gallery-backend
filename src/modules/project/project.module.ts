@@ -9,10 +9,12 @@ import {
   FeedbackUnitSchema,
 } from 'src/schemas/feedback-unit.schema';
 import { UserModule } from '../user/user.module';
+import { Rating, RatingSchema } from 'src/schemas/rating.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
+      { name: Rating.name, schema: RatingSchema },
       { name: Design.name, schema: DesignSchema },
       { name: Project.name, schema: ProjectSchema },
       { name: FeedbackUnit.name, schema: FeedbackUnitSchema },
