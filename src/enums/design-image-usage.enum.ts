@@ -1,11 +1,13 @@
 export const designImageUsages = [
   'ILLUSTRATION',
   'PHOTO',
-  'BOTH'
+  'BOTH',
+  'NONE'
 ];
 
 export enum EDesignImageUsages {
   ILLUSTRATION = 'ILLUSTRATION',
   PHOTO = 'PHOTO',
-  BOTH = 'BOTH'
+  BOTH = 'BOTH',
+  NONE = 'NONE'
 }
