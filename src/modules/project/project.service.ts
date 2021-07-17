@@ -149,10 +149,9 @@ export class ProjectService {
       .project({
         _id: 1,
         hasCompleted: {
-          $cond: { if: { $gte: ['$count', 2] }, then: true, else: false },
+          $cond: { if: { $gte: ['$count', 1] }, then: true, else: false },
         },
       })
-   
     return feedbackUnitsWithAspect;
   }
 
