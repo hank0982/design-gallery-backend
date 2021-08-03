@@ -52,6 +52,7 @@ export class DesignService {
       {
         originalFileName,
         newFileName: fileName,
+        thumbnailUrl: `${hostname}/thumbnails/${fileName}`,
         url: `${hostname}/uploads/${fileName}`,
         uuid: path.parse(fileName).name,
         size,

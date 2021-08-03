@@ -12,6 +12,9 @@ export class Image {
   newFileName: string;
 
   @Prop(String)
+  thumbnailUrl: string;
+  
+  @Prop(String)
   url: string;
 
   @Prop(String)

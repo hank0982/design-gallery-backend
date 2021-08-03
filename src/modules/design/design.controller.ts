@@ -12,6 +12,7 @@ import {
   BadRequestException,
   UploadedFile,
 } from '@nestjs/common';
+import { promises as fs } from 'fs';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { isValidObjectId } from 'mongoose';
@@ -23,6 +24,7 @@ import { DesignService } from './design.service';
 import { CreateDesignDto } from './dtos/create-design.dto';
 import { UpdateDesignDto } from './dtos/update-design.dto';
 import { v4 as uuidv4 } from 'uuid';
+import * as imageThumbnail from 'image-thumbnail';
 
 @ApiTags('Designs')
 @Controller('api/designs')
@@ -110,7 +112,15 @@ export class DesignController {
       throw new BadRequestException('Invalid files');
     }
     const hostname = req.headers.host;
-
+    try {
+      const thumbnail = await imageThumbnail(path.resolve('.', 'client', 'uploads', file.filename));
+      const thumbnailPath = path.resolve('.', 'client', 'thumbnails', file.filename);
+      await fs.writeFile(thumbnailPath, thumbnail).catch((err) => {
+        if (err) return console.log(err);
+      });
+    } catch (err) {
+        console.error(err);
+    }
     return await this.designService.saveImage(file.filename, file.originalname, file.size, hostname);
   }
 }

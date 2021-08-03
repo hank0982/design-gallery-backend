@@ -11,13 +11,14 @@ import { EDesignAspect } from 'src/enums/design-aspects.enum';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
   async create(createUserDto: CreateUserDto) {
+    let returnData;
     try {
-      await this.userModel.create(createUserDto);
+      returnData = await this.userModel.create(createUserDto);
     } catch (e) {
       throw e;
     }
-    delete createUserDto.password;
-    return createUserDto;
+    returnData.password = undefined;
+    return returnData;
   }
 
   async findAll() {
