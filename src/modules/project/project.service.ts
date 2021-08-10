@@ -176,7 +176,9 @@ export class ProjectService {
       isNotEmpty(projectQuery.imageUsage) ||
       isNotEmpty(projectQuery.textProportion) ||
       isNotEmpty(projectQuery.overallQuality) ||
-      isNotEmpty(projectQuery.textQuantity)
+      isNotEmpty(projectQuery.textQuantity) ||
+      isNotEmpty(projectQuery.dominantColor) ||
+      isNotEmpty(projectQuery.mainColor)
     ) {
       const queriesForDesign = [
         isNotEmpty(projectQuery.textProportion)
@@ -190,6 +192,12 @@ export class ProjectService {
           : undefined,
         isNotEmpty(projectQuery.overallQuality)
           ? { overallQuality: projectQuery.overallQuality }
+          : undefined,
+        isNotEmpty(projectQuery.dominantColor)
+          ? { dominantColor: `#${projectQuery.dominantColor}` }
+          : undefined,
+        isNotEmpty(projectQuery.mainColor)
+          ? { mainColor: `#${projectQuery.mainColor}` }
           : undefined,
       ].filter((x) => x);
       if (queriesForDesign.length > 0) {

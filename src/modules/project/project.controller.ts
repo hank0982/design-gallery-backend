@@ -18,6 +18,7 @@ import { EDesignAspect } from 'src/enums/design-aspects.enum';
 @ApiTags('Projects')
 @Controller('api/projects')
 export class ProjectController {
+
   constructor(private readonly projectService: ProjectService) {}
 
   @Post()
