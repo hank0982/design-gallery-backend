@@ -5,6 +5,7 @@ export const designAspects = [
   'HIERARCHY',
   'CONSISTENCY',
   'READABILITY',
+  'OVERALL'
 ];
 
 export enum EDesignAspect {
@@ -14,4 +15,5 @@ export enum EDesignAspect {
   HIERARCHY = 'HIERARCHY',
   CONSISTENCY = 'CONSISTENCY',
   READABILITY = 'READABILITY',
+  OVERALL = 'OVERALL',
 }

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { FeedbackUnitService } from './feedback-unit.service';
 import { CreateFeedbackUnitDto } from './dtos/create-feedback-unit.dto';
@@ -15,6 +16,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { EDesignAspect } from 'src/enums/design-aspects.enum';
 import { ErrorMessage } from 'src/error-messages/error-message.en';
 import { CreateTopicDto } from './dtos/create-topic.dto';
+import { FeedbackQueryDto } from './dtos/feedback-query.dto';
 
 @ApiTags('FeedbackUnits')
 @Controller('api/feedback-units')
@@ -27,8 +29,9 @@ export class FeedbackUnitController {
   }
 
   @Get()
-  async findAll() {
-    return await this.feedbackUnitService.findAll();
+  async findAll(@Query() feedbackQuery: FeedbackQueryDto) {
+    console.log(feedbackQuery)
+    return await this.feedbackUnitService.findAll(feedbackQuery);
   }
 
   @Get(':id')

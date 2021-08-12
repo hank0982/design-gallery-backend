@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsEnum, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { ObjectId } from 'mongoose';
 import { designAspects, EDesignAspect } from 'src/enums/design-aspects.enum';
 import { EDesignSubaspect } from 'src/enums/design-subaspects.enum copy';
@@ -21,15 +21,16 @@ export class CreateFeedbackUnitDto {
   @IsEnum(EDesignAspect)
   aspect: EDesignAspect;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   subaspect: string;
 
-  @ApiProperty({type: Boolean})
   @IsBoolean()
+  @IsOptional()
   addressed: boolean;
 
-  @ApiProperty({type: Boolean})
+  @ApiPropertyOptional({type: Boolean})
   @IsBoolean()
+  @IsOptional()
   isPositive: boolean;
 }

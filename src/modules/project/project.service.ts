@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { classToPlain } from 'class-transformer';
 import { isNotEmpty } from 'class-validator';
-import { FilterQuery, Model, ObjectId, Types } from 'mongoose';
+import { FilterQuery, Model, Mongoose, ObjectId, Types } from 'mongoose';
 import { EDesignAspect } from 'src/enums/design-aspects.enum';
 import { Design, DesignDocument } from 'src/schemas/design.schema';
 import {
@@ -13,6 +13,7 @@ import { Project, ProjectDocument } from 'src/schemas/project.schema';
 import { Rating, RatingDocument } from 'src/schemas/rating.schema';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { PaginationResult } from 'src/utils/pagination-result.util';
+import { ObjectID } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { CreateProjectDto } from './dtos/create-project.dto';
 import { ProjectQueryDto } from './dtos/project-query.dto';

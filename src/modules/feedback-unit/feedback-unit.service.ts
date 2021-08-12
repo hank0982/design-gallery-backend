@@ -11,6 +11,7 @@ import { Principle, PrincipleDocument, PrincipleSchema } from 'src/schemas/princ
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { CreateFeedbackUnitDto } from './dtos/create-feedback-unit.dto';
 import { CreateTopicDto } from './dtos/create-topic.dto';
+import { FeedbackQueryDto } from './dtos/feedback-query.dto';
 import { UpdateFeedbackUnitDto } from './dtos/update-feedback-unit.dto';
 
 @Injectable()
@@ -35,8 +36,19 @@ export class FeedbackUnitService {
     return createdFeedbackUnit;
   }
 
-  async findAll() {
-    return await this.feedbackUnitModel.find().exec();
+  async findAll(feedbackQuery: FeedbackQueryDto) {
+    let feedbackUnitDocument = this.feedbackUnitModel.find();
+    if (feedbackQuery.designId) {
+      feedbackUnitDocument = this.feedbackUnitModel.find({
+        designId: feedbackQuery.designId,
+      });
+    }
+    if (feedbackQuery.feedbackProviderId) {
+      feedbackUnitDocument = feedbackUnitDocument.find({
+        feedbackProviderId: feedbackQuery.feedbackProviderId
+      })
+    }
+    return await feedbackUnitDocument.exec();
   }
 
   async findOne(id: string) {
