@@ -26,8 +26,8 @@ export class FeedbackUnit {
   @Prop(String)
   subaspect: string;
   
-  @Prop({ type: Boolean })
-  isPositive: boolean;
+  @Prop(String)
+  sentiment: 'NEUTRAL' | 'POSITIVE' | 'NEGATIVE';
 
   @Prop({ type: Boolean})
   addressed: boolean;

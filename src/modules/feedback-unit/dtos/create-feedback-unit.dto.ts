@@ -29,8 +29,8 @@ export class CreateFeedbackUnitDto {
   @IsOptional()
   addressed: boolean;
 
-  @ApiPropertyOptional({type: Boolean})
-  @IsBoolean()
+  @ApiPropertyOptional()
+  @IsString()
   @IsOptional()
-  isPositive: boolean;
+  sentiment: 'NEUTRAL' | 'POSITIVE' | 'NEGATIVE';
 }
