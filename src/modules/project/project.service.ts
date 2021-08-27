@@ -13,7 +13,7 @@ import { Project, ProjectDocument } from 'src/schemas/project.schema';
 import { Rating, RatingDocument } from 'src/schemas/rating.schema';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { PaginationResult } from 'src/utils/pagination-result.util';
-import { ObjectID } from 'typeorm';
+import { ObjectID, SimpleConsoleLogger } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { CreateProjectDto } from './dtos/create-project.dto';
 import { ProjectQueryDto } from './dtos/project-query.dto';
@@ -43,13 +43,11 @@ export class ProjectService {
       await this.queryProjectIdsMatchedDesignProperties(projectQuery);
     const projectIdsMatchSubaspects =
       await this.queryProjectIdsMatchedSubaspects(projectQuery);
-    if (projectIdsMatchedDesignProperties.length > 0) {
-      projectDocument = projectDocument.find({
-        $or: [
-          { _id: { $in: projectIdsMatchedDesignProperties } },
-          { _id: { $in: projectIdsMatchSubaspects } },
-        ],
-      });
+    const projectIdsIntersection = [...new Set([...projectIdsMatchedDesignProperties, ...projectIdsMatchSubaspects]).values()];
+    if (projectIdsIntersection.length > 0) {
+      projectDocument = projectDocument.find(
+          { _id: { $in: projectIdsIntersection } },
+       );
     }
     const coursesAndSourcesQueries =
       this.generateQueryForCategoriesAndSourcesByProjectQuery(projectQuery);
@@ -219,20 +217,12 @@ export class ProjectService {
     projectQuery: ProjectQueryDto,
   ) {
     if (isNotEmpty(projectQuery.subaspects)) {
-      const queriesForFeedbackUnit = [
-        isNotEmpty(projectQuery.subaspects)
-          ? { amountOfText: { $in: projectQuery.subaspects } }
-          : undefined,
-      ].filter((x) => x);
-      if (queriesForFeedbackUnit.length > 0) {
+      const queriesForFeedbackUnit = isNotEmpty(projectQuery.subaspects)
+      ? { subaspect: { $in: projectQuery.subaspects } } : undefined;
+      if (queriesForFeedbackUnit) {
         const designIds = (
           await this.feedbackUnitModel
-            .find()
-            .and(
-              queriesForFeedbackUnit.length > 0
-                ? queriesForFeedbackUnit
-                : undefined,
-            )
+            .find(queriesForFeedbackUnit)
             .select('-_id designId')
             .exec()
         ).map((x) => x.designId);
@@ -242,7 +232,7 @@ export class ProjectService {
           })
           .select('-_id projectId')
           .exec();
-        return projectIds;
+        return projectIds.map(x => x.projectId);
       }
     }
     return [];
