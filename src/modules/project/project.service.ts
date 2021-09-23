@@ -18,6 +18,7 @@ import { UserService } from '../user/user.service';
 import { CreateProjectDto } from './dtos/create-project.dto';
 import { ProjectQueryDto } from './dtos/project-query.dto';
 import { UpdateProjectDto } from './dtos/update-project.dto';
+import * as util from 'util';
 @Injectable()
 export class ProjectService {
   constructor(
@@ -43,6 +44,8 @@ export class ProjectService {
       await this.queryProjectIdsMatchedDesignProperties(projectQuery);
     const projectIdsMatchSubaspects =
       await this.queryProjectIdsMatchedSubaspects(projectQuery);
+    // const projectIdsWithImprovedRating = 
+    //   await this.queryProjectIdsWithImprovedSubaspect(projectQuery);
     const projectIdsIntersection = [...new Set([...projectIdsMatchedDesignProperties, ...projectIdsMatchSubaspects]).values()];
     if (projectIdsIntersection.length > 0) {
       projectDocument = projectDocument.find(
@@ -165,6 +168,8 @@ export class ProjectService {
         ? { categories: { $in: projectQueryDto.categories } }
         : undefined,
     ].filter((x) => x);
+
+    console.log(projectQueryDto)
     return queryAndList;
   }
 
@@ -234,6 +239,28 @@ export class ProjectService {
           .exec();
         return projectIds.map(x => x.projectId);
       }
+    }
+    return [];
+  }
+
+  private async queryProjectIdsWithImprovedSubaspect(
+    projectQuery: ProjectQueryDto,
+  ) {
+    if (isNotEmpty(projectQuery.improvedSubaspects)) {
+      console.log(await this.designModel.find().exec())
+      const ratings = await this.designModel.aggregate().lookup({
+        from: 'ratings',
+        localField: 'ratingIds',
+        foreignField: '_id',
+        as: 'ratings',
+      }).exec();
+      ratings.map(x => {
+        return {
+          projectId: x.projectId,
+          version: x.version,
+          rating: x.ratings
+        }
+      });
     }
     return [];
   }

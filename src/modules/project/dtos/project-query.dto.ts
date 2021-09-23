@@ -75,6 +75,13 @@ export class ProjectQueryDto extends PaginationQueryDto {
   subaspects: string[];
 
   @ApiPropertyOptional()
+  @IsArray()
+  @IsOptional()
+  @Type(() => String)
+  @Transform(({ value }) => value.split(','))
+  improvedSubaspects: string[];
+
+  @ApiPropertyOptional()
   @IsOptional()
   @Type(() => String)
   mainColor: string;
