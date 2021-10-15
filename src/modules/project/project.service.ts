@@ -44,12 +44,9 @@ export class ProjectService {
       await this.queryProjectIdsMatchedDesignProperties(projectQuery);
     const projectIdsMatchSubaspects =
       await this.queryProjectIdsMatchedSubaspects(projectQuery);
-    console.log(projectIdsMatchSubaspects, "asd")
-    console.log(projectIdsMatchedDesignProperties)
     // const projectIdsWithImprovedRating = 
     //   await this.queryProjectIdsWithImprovedSubaspect(projectQuery);
     const projectIdsIntersection = [...new Set([...projectIdsMatchedDesignProperties, ...projectIdsMatchSubaspects]).values()];
-    console.log(projectIdsIntersection)
     if (this.isUserQueryDesignProperties(projectQuery) || isNotEmpty(projectQuery.subaspects)) {
       projectDocument = projectDocument.find(
           { _id: { $in: projectIdsIntersection } },
@@ -62,7 +59,6 @@ export class ProjectService {
         $and: coursesAndSourcesQueries,
       });
     }
-    console.log((await projectDocument.exec()).length)
     return new PaginationResult<ProjectDocument>(
       await projectDocument
         .skip(projectQuery.skip)
@@ -172,7 +168,6 @@ export class ProjectService {
         : undefined,
     ].filter((x) => x);
 
-    console.log(projectQueryDto)
     return queryAndList;
   }
 
@@ -227,7 +222,6 @@ export class ProjectService {
     if (isNotEmpty(projectQuery.subaspects)) {
       const queriesForFeedbackUnit = isNotEmpty(projectQuery.subaspects)
       ? { subaspect: { $in: projectQuery.subaspects } } : undefined;
-      console.log(queriesForFeedbackUnit)
       if (queriesForFeedbackUnit) {
         const subaspectNumberMap = new Map<string, Set<string>>();
         const selectedDesignIds = [];
@@ -236,7 +230,6 @@ export class ProjectService {
             .select('designId subaspect')
             .exec()
         ).forEach((x) => {
-          console.log(x)
           if (subaspectNumberMap.get(String(x.designId)) !== undefined) {
             subaspectNumberMap.get(String(x.designId)).add(x.subaspect)
           } else {
@@ -246,16 +239,12 @@ export class ProjectService {
             selectedDesignIds.push(x.designId);
           }
         });
-        console.log(subaspectNumberMap)
-
-        console.log(selectedDesignIds)
         const projectIds = await this.designModel
           .find({
             _id: { $in: selectedDesignIds },
           })
           .select('-_id projectId')
           .exec();
-        console.log(projectIds)
         return projectIds.map(x => x.projectId);
       }
     }
@@ -266,7 +255,6 @@ export class ProjectService {
     projectQuery: ProjectQueryDto,
   ) {
     if (isNotEmpty(projectQuery.improvedSubaspects)) {
-      console.log(await this.designModel.find().exec())
       const ratings = await this.designModel.aggregate().lookup({
         from: 'ratings',
         localField: 'ratingIds',
