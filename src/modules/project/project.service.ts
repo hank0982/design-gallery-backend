@@ -44,10 +44,13 @@ export class ProjectService {
       await this.queryProjectIdsMatchedDesignProperties(projectQuery);
     const projectIdsMatchSubaspects =
       await this.queryProjectIdsMatchedSubaspects(projectQuery);
+    console.log(projectIdsMatchSubaspects, "asd")
+    console.log(projectIdsMatchedDesignProperties)
     // const projectIdsWithImprovedRating = 
     //   await this.queryProjectIdsWithImprovedSubaspect(projectQuery);
     const projectIdsIntersection = [...new Set([...projectIdsMatchedDesignProperties, ...projectIdsMatchSubaspects]).values()];
-    if (projectIdsIntersection.length > 0) {
+    console.log(projectIdsIntersection)
+    if (this.isUserQueryDesignProperties(projectQuery) || isNotEmpty(projectQuery.subaspects)) {
       projectDocument = projectDocument.find(
           { _id: { $in: projectIdsIntersection } },
        );
@@ -59,7 +62,7 @@ export class ProjectService {
         $and: coursesAndSourcesQueries,
       });
     }
-
+    console.log((await projectDocument.exec()).length)
     return new PaginationResult<ProjectDocument>(
       await projectDocument
         .skip(projectQuery.skip)
@@ -224,19 +227,35 @@ export class ProjectService {
     if (isNotEmpty(projectQuery.subaspects)) {
       const queriesForFeedbackUnit = isNotEmpty(projectQuery.subaspects)
       ? { subaspect: { $in: projectQuery.subaspects } } : undefined;
+      console.log(queriesForFeedbackUnit)
       if (queriesForFeedbackUnit) {
-        const designIds = (
-          await this.feedbackUnitModel
+        const subaspectNumberMap = new Map<string, Set<string>>();
+        const selectedDesignIds = [];
+        (await this.feedbackUnitModel
             .find(queriesForFeedbackUnit)
-            .select('-_id designId')
+            .select('designId subaspect')
             .exec()
-        ).map((x) => x.designId);
+        ).forEach((x) => {
+          console.log(x)
+          if (subaspectNumberMap.get(String(x.designId)) !== undefined) {
+            subaspectNumberMap.get(String(x.designId)).add(x.subaspect)
+          } else {
+            subaspectNumberMap.set(String(x.designId), new Set([x.subaspect]));
+          }
+          if (subaspectNumberMap.get(String(x.designId)).size === projectQuery.subaspects.length) {
+            selectedDesignIds.push(x.designId);
+          }
+        });
+        console.log(subaspectNumberMap)
+
+        console.log(selectedDesignIds)
         const projectIds = await this.designModel
           .find({
-            _id: { $in: designIds },
+            _id: { $in: selectedDesignIds },
           })
           .select('-_id projectId')
           .exec();
+        console.log(projectIds)
         return projectIds.map(x => x.projectId);
       }
     }
@@ -263,6 +282,15 @@ export class ProjectService {
       });
     }
     return [];
+  }
+
+  private isUserQueryDesignProperties(projectQuery: ProjectQueryDto): boolean {
+    return isNotEmpty(projectQuery.imageUsage) ||
+    isNotEmpty(projectQuery.textProportion) ||
+    isNotEmpty(projectQuery.overallQuality) ||
+    isNotEmpty(projectQuery.textQuantity) ||
+    isNotEmpty(projectQuery.dominantColor) ||
+    isNotEmpty(projectQuery.mainColor)
   }
 }
 
