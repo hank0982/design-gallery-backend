@@ -64,7 +64,9 @@ export class UserService {
 
   async findOneById(id: string) {
     if (mongoose.isValidObjectId(id)) {
-      return await this.userModel.findById(id).exec();
+      let user =  await this.userModel.findById(id).exec();
+      user.password = undefined;
+      return user;
     } else {
       throw new NotFoundException('User not found');
     }

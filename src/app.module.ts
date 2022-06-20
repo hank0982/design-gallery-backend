@@ -14,6 +14,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ImageModule } from './modules/image/image.module';
 import { FeedbackUnitService } from './modules/feedback-unit/feedback-unit.service';
+import { UserActivityModule } from './modules/user-activity/user-activity.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { FeedbackUnitService } from './modules/feedback-unit/feedback-unit.servi
     UserModule,
     AuthModule,
     ImageModule,
+    UserActivityModule,
   ],
   controllers: [AppController],
   providers: [AppService, FeedbackUnitService],

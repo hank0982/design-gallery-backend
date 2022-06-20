@@ -28,6 +28,7 @@ export class User {
 
   @Prop({type: Object})
   surveyInfo?: ISurveyInfo;
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
